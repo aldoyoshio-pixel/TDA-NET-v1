@@ -1,0 +1,100 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# DTA-Net Stack V5 — Entorno Conda
+# Actualizado: Febrero 2026
+#
+# ⚠ INSTRUCCIÓN IMPORTANTE — PyTorch requiere 2 pasos:
+#
+#   PASO 1 — Crear el entorno (todo excepto PyTorch):
+#     conda env create -f dtiam_mod_stack_v5.yaml
+#
+#   PASO 2 — Instalar PyTorch con el index correcto:
+#     conda activate dtiam_modern_stack_v5
+#
+#     Driver >= 570 (CUDA 12.8, RECOMENDADO):
+#     pip install torch==2.7.0+cu128 torchvision==0.22.0+cu128 torchaudio==2.7.0+cu128 \
+#       --index-url https://download.pytorch.org/whl/cu128
+#
+#     Driver 525-569 (CUDA 12.4):
+#     pip install torch==2.6.0+cu124 torchvision==0.21.0+cu124 torchaudio==2.6.0+cu124 \
+#       --index-url https://download.pytorch.org/whl/cu124
+#
+#     Sin GPU:
+#     pip install torch==2.7.0+cpu torchvision==0.22.0+cpu torchaudio==2.7.0+cpu \
+#       --index-url https://download.pytorch.org/whl/cpu
+#
+#   O usa el script que hace todo automático:
+#     python dtiam_setup.py --install
+#
+# ── ¿Por qué 2 pasos? ───────────────────────────────────────────────────────
+#   Las versiones +cu128 solo existen en download.pytorch.org/whl/cu128,
+#   NO en PyPI. Cuando conda lee la sección pip: del YAML llama a pip
+#   sin --index-url, así que solo busca en PyPI y no las encuentra.
+#   No hay forma de pasar --index-url dentro del YAML de conda — es una
+#   limitación conocida del formato. La solución es instalar PyTorch aparte.
+#
+# ── Verifica tu driver ───────────────────────────────────────────────────────
+#   nvidia-smi   →  columna "CUDA Version" indica la máxima soportada
+#   Driver >= 570 → CUDA 12.8 → --index-url .../cu128
+#   Driver 560-569 → CUDA 12.6 → --index-url .../cu126
+#   Driver 525-559 → CUDA 12.4 → --index-url .../cu124
+# ══════════════════════════════════════════════════════════════════════════════
+
+name: dtiam_modern_stack_v5
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  # ── Python ──────────────────────────────────────────────────────────────────
+  - python=3.12
+  - pip
+  - setuptools>=75
+  - wheel
+
+  # ── Jupyter ─────────────────────────────────────────────────────────────────
+  - jupyterlab>=4.2
+  - notebook>=7.2
+  - ipykernel
+  - ipywidgets>=8.1
+
+  # ── Científicas base ─────────────────────────────────────────────────────────
+  - numpy>=1.26,<2.1
+  - pandas>=2.2,<3.0
+  - scipy>=1.13
+  - scikit-learn>=1.5,<1.7
+
+  # ── Química / Biología ───────────────────────────────────────────────────────
+  - rdkit>=2024.03
+  - biopython>=1.84
+
+  # ── Utilidades ───────────────────────────────────────────────────────────────
+  - tqdm>=4.66
+  - dill>=0.3.8
+  - pyyaml>=6.0
+  - requests>=2.32
+  - filelock>=3.15
+  - matplotlib>=3.9
+  - seaborn>=0.13
+  - pyvis>=0.3
+
+  # ── pip installs ──────────────────────────────────────────────────────────────
+  # PyTorch NO está aquí — instalarlo después del Paso 1 (ver instrucciones arriba).
+  # Las comillas en cada paquete son necesarias para que el shell no interprete
+  # < y > como redirección de archivo.
+  - pip:
+    - "transformers>=4.51.0,<4.58"
+    - "tokenizers>=0.21.0"
+    - "huggingface-hub>=0.24.0"
+    - "accelerate>=0.33.0"
+    - "safetensors>=0.4.3"
+    - "selfies>=2.1.2"
+    - "gradio>=5.0,<6.0"
+    # AutoGluon requiere torch>=2.6 ya instalado para resolver sus deps.
+    # Si falla aquí, instálalo manualmente después del Paso 2:
+    #   pip install autogluon==1.5.0
+    - "autogluon==1.5.0"
+    - "fair-esm"
+
+# Ajusta el prefix a tu ruta real de anaconda/miniconda:
+# prefix: /home/eag/anaconda3/envs/dtiam_modern_stack_v5
