@@ -1,0 +1,1 @@
+Mapping serves as an internal dictionary for those chemical compounds and proteins found in more than one dataset. We try to unify the data into a single dictionary to explore results in a cross platform version of datasets. So we need to standardize the input format, but there is a tool to ask the user the structure of their input files. 
