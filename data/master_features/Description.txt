@@ -1,0 +1,1 @@
+Here we can find the json and h5 models after featurization of chemical compounds and sequences of aminoacids using LLM's for chemisty and pLM for proteins. 
